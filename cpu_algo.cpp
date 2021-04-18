@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include "include/cpu_algo.h"
 
+// Define the maximum size of processes
 #define MAX_SIZE_PROC 50
 
 using namespace std;
@@ -14,19 +15,21 @@ Defining a process structure which contains
 * Turnaround Time
 * Waiting Time
 
-as its attributes
+as its attributes.
+Also create a global array of processes
  */
 struct Process {
     int pid;
     int at;
     int bt;
     int tat = 0;
-    int wt = 0;
+    int wt = -1;
 } arr[MAX_SIZE_PROC];
 
+// Global variable to store the number of processes
 int n;
 
-// Function to find turnaround time of each process for FCFS Algorithm
+// Function to find turnaround time of each process
 void findTAT() {
     for (int i=0; i<n; i++) {
         arr[i].tat = arr[i].bt + arr[i].wt;
@@ -38,6 +41,74 @@ void findWT_fcfs() {
     arr[0].wt = 0;
     for (int i=1; i<n; i++) {
         arr[i].wt = arr[i-1].wt + arr[i-1].bt;
+    }
+}
+
+// Function to find waiting time of each process for SJF Algorithm
+void findWT_sjf() {
+    int completed = 0, t = 0, mintime = INT_MAX, shortest;
+    bool flag = false;
+
+    // Outer loop is run till all processes are complete
+    while (completed < n) {
+
+        // Finding process with shortest burst time
+        for (int i=0; i < n && arr[i].at <= t; i++) {
+            if (arr[i].bt < mintime && arr[i].wt < 0) {
+                mintime = arr[i].bt;
+                shortest = i;
+                flag = true;
+            } 
+        }
+
+        // Check if no process was found
+        if (!flag) {
+            t++;
+            continue;
+        }       
+        // If shortest process is found, complete the process
+        else {
+            mintime = INT_MAX;
+            flag = false;
+            completed++;
+
+            arr[shortest].wt = t - arr[shortest].at;
+            t += arr[shortest].bt;
+        }
+    }
+}
+
+// Function to find waiting time of each process for LJF Algorithm
+void findWT_ljf() {
+    int completed = 0, t = 0, maxtime = INT_MIN, longest;
+    bool flag = false;
+
+    // Outer loop is run till all processes are complete
+    while (completed < n) {
+
+        // Finding process with longest burst time
+        for (int i=0; i < n && arr[i].at <= t; i++) {
+            if (arr[i].bt > maxtime && arr[i].wt < 0) {
+                maxtime = arr[i].bt;
+                longest = i;
+                flag = true;
+            } 
+        }
+
+        // Check if no process was found
+        if (!flag) {
+            t++;
+            continue;
+        }       
+        // If longest process is found, complete the process
+        else {
+            maxtime = INT_MIN;
+            flag = false;
+            completed++;
+
+            arr[longest].wt = t - arr[longest].at;
+            t += arr[longest].bt;
+        }
     }
 }
 
@@ -71,7 +142,7 @@ void findWT_srtf() {
             continue;
         }
 
-        // Update remaining time of shortest process and update minimim time value
+        // Update remaining time of shortest process and update minimum time value
         rt[shortest]--;
         mintime = rt[shortest];
         
@@ -82,6 +153,52 @@ void findWT_srtf() {
             flag = false;
 
             arr[shortest].wt = t + 1 - arr[shortest].bt - arr[shortest].at;
+        }
+        t++;
+    }
+}
+
+// Function to find waiting time of each process for LRTF Algorithm
+void findWT_lrtf() {
+    
+    // Initializing an array to hold remaining time values
+    int *rt = new int(n);
+    for (int i=0; i<n; i++) {
+        rt[i] = arr[i].bt;
+    }
+
+    int completed = 0, t = 0, maxtime = INT_MIN, longest;
+    bool flag = false;
+
+    // Running while loop until all processes are completed
+    while (completed != n) {
+
+        // Finding process with longest remaining time
+        for (int i=0; i < n && arr[i].at <= t; i++) {
+            if (rt[i] > maxtime && rt[i] > 0) {
+                maxtime = rt[i];
+                longest = i;
+                flag = true;
+            } 
+        }
+
+        // Check if no process was found
+        if (!flag) {
+            t++;
+            continue;
+        }
+
+        // Update remaining time of longest process and update maximum time value
+        rt[longest]--;
+        maxtime = rt[longest];
+        
+        // Check if longest process is completed
+        if (rt[longest] == 0) {
+            maxtime = INT_MIN;
+            completed++;
+            flag = false;
+
+            arr[longest].wt = t + 1 - arr[longest].bt - arr[longest].at;
         }
         t++;
     }
@@ -132,15 +249,20 @@ void findWT_rr(int q) {
     }
 }
 
+// Helper function to sort processes based on their arrival times
 bool cmp (Process p1, Process p2) {
     return (p1.at < p2.at);
 }
 
 // Function to input the processes from the user
 void inputProcessesCPU() {
-    cout << "Enter the number of processes: ";
-    cin >> n;
+    // Check for positive integer input
+    do {
+        cout << "\nEnter the number of processes: ";
+        cin >> n;
+    } while (n <= 0);
 
+    // Input the arrival and burst times for each process
     for (int i=0; i < n; i++) {
         cout << "\n\nFor Process " << i;
         cout << "\n--------------\n";
@@ -152,6 +274,7 @@ void inputProcessesCPU() {
         arr[i].pid = i;
     }
 
+    // Sort the processes based on their arrival times
     sort(arr, arr + n, cmp);
 }
 
@@ -160,6 +283,8 @@ void displayResultCPU() {
     float avgTAT = 0, avgWT = 0;
 
     cout << "\nPID\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\n\n";
+
+    // Print the results for each process in the array
     for (int i=0; i<n; i++) {
         cout << left << setw(8) << arr[i].pid;
         cout << left << setw(17) << arr[i].at;
@@ -175,11 +300,15 @@ void displayResultCPU() {
     cout << "Average Turnaround Time: " << (avgTAT / n) << "\n\n";
 }
 
+// Top Level function used in main.cpp, this is the only function accessible through cpu_algo.h
 void CPU_Scheduling() {
     int choice, quantum;
+
+    // Input the processes from the user
     inputProcessesCPU();
 
-    cout << "\nCPU Scheduling Algorithm\n";
+    // List out the supported CPU Scheduling Algorithms
+    cout << "\n\nCPU Scheduling Algorithm\n\n";
     cout << "1. First Come First Serve (FCFS)\n";
     cout << "2. Shortest Job First (SJF)\n";
     cout << "3. Longest Job First (LJF)\n";
@@ -189,7 +318,9 @@ void CPU_Scheduling() {
     cout << "\nEnter your choice: ";
     cin >> choice;
 
+    // Switch case based on User Input
     switch(choice) {
+        // FCFS Case
         case 1: {
             findWT_fcfs();
             findTAT();
@@ -198,30 +329,43 @@ void CPU_Scheduling() {
 
             break;
         }
+        // SJF Case
         case 2: {
-            // TODO
-
-            break;
-        }
-        case 3: {
-            // TODO
-
-            break;
-        }
-
-        case 4: {
-            findWT_srtf();
+            findWT_sjf();
             findTAT();
-            cout << "Using the Shortest Remaining Time First Algorithm:\n";
+            cout << "\nUsing SJF Scheduling Algorithm:\n";
             displayResultCPU();
 
             break;
         }
-        case 5: {
-            // TODO
+        // LJF Case
+        case 3: {
+            findWT_ljf();
+            findTAT();
+            cout << "Using LJF Scheduling Algorithm:\n";
+            displayResultCPU();
 
             break;
         }
+        // SRTF Case
+        case 4: {
+            findWT_srtf();
+            findTAT();
+            cout << "Using the SRTF Algorithm:\n";
+            displayResultCPU();
+
+            break;
+        }
+        // LRTF Case
+        case 5: {
+            findWT_lrtf();
+            findTAT();
+            cout << "Using the LRTF Algorithm:\n";
+            displayResultCPU();
+
+            break;
+        }
+        // RR Case
         case 6: {
             cout << "\nEnter the value of time quantum: ";
             cin >> quantum;
@@ -232,8 +376,7 @@ void CPU_Scheduling() {
 
             break;
         }
+        // Default case to handle invalid user inputs
         default: "\nInvalid choice entered...\n";
     }
-
-
 }

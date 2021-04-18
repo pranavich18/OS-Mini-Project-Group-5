@@ -1,7 +1,6 @@
 # OS-Mini-Project-Group-4
 
-To execute the code as of now
-
+To compile the project, enter the following command:
 `make main`
 
 ## Contributions

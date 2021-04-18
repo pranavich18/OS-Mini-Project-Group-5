@@ -1,9 +1,11 @@
+# Config variables
 IDIR = ../include
 CC = g++
 CFLAGS = -I$(IDIR)
 
 # Add the header files to this list
 _DEPS = bankers.h cpu_algo.h
+
 DEPS = $(patsubst %, $(IDIR)/%, $(_DEPS))
 
 # Add the files with the .o extension to this list
