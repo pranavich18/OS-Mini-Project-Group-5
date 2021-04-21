@@ -249,6 +249,45 @@ void findWT_rr(int q) {
     }
 }
 
+// Function to find waiting time of each process for HRRN Algorithm
+void findWT_hrrn() {
+    int completed = 0, t = 0, maxtime = INT_MIN, longest;
+    float resptime, wt;
+    bool flag = false;
+
+    // Outer loop is run till all processes are complete
+    while (completed < n) {
+
+        // Finding process with highest response ratio time
+        for (int i=0; i < n && arr[i].at <= t; i++) {
+            if (arr[i].wt < 0) {
+                wt = t - arr[i].at;
+                resptime = (wt + arr[i].bt) / arr[i].bt;
+                if (resptime > maxtime) {
+                    maxtime = resptime;
+                    longest = i;
+                    flag = true;
+                }
+            } 
+        }
+
+        // Check if no process was found
+        if (!flag) {
+            t++;
+            continue;
+        }       
+        // If process is found, complete the process
+        else {
+            maxtime = INT_MIN;
+            flag = false;
+            completed++;
+
+            arr[longest].wt = t - arr[longest].at;
+            t += arr[longest].bt;
+        }
+    }
+}
+
 // Helper function to sort processes based on their arrival times
 bool cmp (Process p1, Process p2) {
     return (p1.at < p2.at);
@@ -308,13 +347,15 @@ void CPU_Scheduling() {
     inputProcessesCPU();
 
     // List out the supported CPU Scheduling Algorithms
-    cout << "\n\nCPU Scheduling Algorithm\n\n";
+    cout << "\n\nChoose CPU Scheduling Algorithm\n";
+    cout << "-------------------------------\n\n";
     cout << "1. First Come First Serve (FCFS)\n";
     cout << "2. Shortest Job First (SJF)\n";
     cout << "3. Longest Job First (LJF)\n";
     cout << "4. Shortest Remaining Time First (SRTF)\n";
     cout << "5. Longest Remaining Time First (LRTF)\n";
     cout << "6. Round Robin (RR)\n";
+    cout << "7. Highest Response Ratio Next (HRRN)\n";
     cout << "\nEnter your choice: ";
     cin >> choice;
 
@@ -342,7 +383,7 @@ void CPU_Scheduling() {
         case 3: {
             findWT_ljf();
             findTAT();
-            cout << "Using LJF Scheduling Algorithm:\n";
+            cout << "\nUsing LJF Scheduling Algorithm:\n";
             displayResultCPU();
 
             break;
@@ -351,7 +392,7 @@ void CPU_Scheduling() {
         case 4: {
             findWT_srtf();
             findTAT();
-            cout << "Using the SRTF Algorithm:\n";
+            cout << "\nUsing the SRTF Algorithm:\n";
             displayResultCPU();
 
             break;
@@ -360,7 +401,7 @@ void CPU_Scheduling() {
         case 5: {
             findWT_lrtf();
             findTAT();
-            cout << "Using the LRTF Algorithm:\n";
+            cout << "\nUsing the LRTF Algorithm:\n";
             displayResultCPU();
 
             break;
@@ -371,7 +412,16 @@ void CPU_Scheduling() {
             cin >> quantum;
             findWT_rr(quantum);
             findTAT();
-            cout << "Using the Round Robin Algorithm with time quantum = " << quantum << ":\n";
+            cout << "\nUsing the Round Robin Algorithm with time quantum = " << quantum << ":\n";
+            displayResultCPU();
+
+            break;
+        }
+        // HRRN Case
+        case 7: {
+            findWT_hrrn();
+            findTAT();
+            cout << "\nUsing the HRRN Algorithm:\n";
             displayResultCPU();
 
             break;
