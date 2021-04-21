@@ -1,8 +1,6 @@
 #include<bits/stdc++.h>
 #include "include/reader_writer.h"
 
-
-
 using namespace std;
 
 // print message based on the index of the process waiting and the index of the process running
@@ -23,7 +21,7 @@ void print_message(int id1, int id2, int index1, int index2, int time)
 }
 
 
-int reader_writer(){
+void reader_writer(){
 	
 	int readers, writers;
 	
