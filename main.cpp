@@ -2,6 +2,7 @@
 
 #include "include/Bankers.h"
 #include "include/cpu_algo.h"
+#include "include/reader_writer.h"
 
 using namespace std;
 
@@ -10,6 +11,7 @@ int main() {
 
 	// Call bankers() to execute the bankers algorithm.
 	// Call CPU_Scheduling() to execute CPU Scheduling algos.
+	// Call reader_writer() to execute reader writer algorithm.
 
 	return 0;
 }

@@ -1,4 +1,6 @@
 #include<bits/stdc++.h>
+#include "include/reader_writer.h"
+
 
 
 using namespace std;
@@ -21,7 +23,7 @@ void print_message(int id1, int id2, int index1, int index2, int time)
 }
 
 
-int main(){
+int reader_writer(){
 	
 	int readers, writers;
 	
