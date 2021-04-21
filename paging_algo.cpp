@@ -77,8 +77,7 @@ void paging_fifo(){
                 // If the page already exists in a frame, print appropriate message
                 else {
                     cout << "The physical address for the above virtual address is " << page_frame[page_no] << " | " << offset << endl;
-                }
-                
+                }   
             }
 
             // If all the frames are filled
@@ -211,7 +210,6 @@ void paging_lru(){
                 else {
                     cout << "The physical address for the above virtual address is " << page_frame[page_no] << " | " << offset << endl;
                 }
-                
                 index[page_no] = i;
             }
 
