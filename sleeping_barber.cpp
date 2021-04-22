@@ -67,6 +67,7 @@ void sleeping_barber()
 		{
 			if(q.empty())
 			{
+				cout<<"At time "<<get<0>(it)<<", customer"<<get<2>(it)<<" finishes haircut and ";
 				cout<<"Barber starts sleeping"<<endl;
 				barber = 0;
 			}
