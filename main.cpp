@@ -10,6 +10,7 @@
 #include "include/producer_consumer.h"
 #include "include/mft.h"
 #include "include/title.h"
+#include "include/sleeping_barber.h"
 
 using namespace std;
 
