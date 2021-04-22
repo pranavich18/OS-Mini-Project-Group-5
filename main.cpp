@@ -19,6 +19,7 @@ int main() {
 	// Call paging() to execute Paging algos.
 	// Call mvt() to execute MVT memory management.
 	// Call Disk_Scheduling() to execute Disk Scheduling algos
+	// Call producer_consumer() to execute Producer-Consumer problem
 
 	return 0;
 }

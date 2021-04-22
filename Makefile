@@ -11,7 +11,7 @@ DEPS = $(patsubst %, $(IDIR)/%, $(_DEPS))
 
 # Add the files with the .o extension to this list
 
-OBJ = main.o bankers.o cpu_algo.o reader_writer.o paging_algo.o mvt.o Disk_Scheduling.o
+OBJ = main.o bankers.o cpu_algo.o reader_writer.o paging_algo.o mvt.o Disk_Scheduling.o producer_consumer.o
 
 %.o: %.cpp $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
