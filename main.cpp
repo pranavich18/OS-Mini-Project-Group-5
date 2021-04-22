@@ -6,6 +6,7 @@
 #include "include/paging_algo.h"
 #include "include/mvt.h"
 #include "include/Disk_Scheduling.h"
+#include "include/producer_consumer.h"
 
 
 using namespace std;

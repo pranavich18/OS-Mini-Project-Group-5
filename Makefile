@@ -5,7 +5,7 @@ CFLAGS = -I$(IDIR)
 
 # Add the header files to this list
 
-_DEPS = bankers.h cpu_algo.h reader_writer.h paging_algo.h mvt.h Disk_Scheduling.h
+_DEPS = bankers.h cpu_algo.h reader_writer.h paging_algo.h mvt.h Disk_Scheduling.h producer_consumer.h
 
 DEPS = $(patsubst %, $(IDIR)/%, $(_DEPS))
 
