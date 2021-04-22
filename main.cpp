@@ -72,7 +72,7 @@ int main() {
 			}
 			// Sleeping Barber Case
 			case 7: {
-				// TODO
+				sleeping_barber();
 				break;
 			}
 			// Paging Case

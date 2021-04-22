@@ -12,7 +12,7 @@ To compile the project, enter the following command:
 | Reader Writer Problem | [reader_writer.cpp](/reader_writer.cpp) | Ragul N S - 191CS146 |
 | Dining Philosopher's Problem | | |
 | Banker's Problem | [Bankers.cpp](/Bankers.cpp) | Rakshit P - 191CS147 |
-| Sleeping Barber's Problem | | |
+| Sleeping Barber's Problem | [sleeping_barber.cpp](/sleeping_barber.cpp) | Rakshit P - 191CS147 |
 | Memory Management (MFT) with First, Best and Worst Fits | [mft.cpp](/mft.cpp) | Prakhar Singh - 191CS144 |
 | Memory Management (MVT) with First, Best and Worst Fits | [mvt.cpp](/mvt.cpp) | Pranav Joshi - 191CS145 |
 | Paging Algorithms (FIFO, LRU, MRU) | [paging_algo.cpp](/paging_algo.cpp)| Prachi Priyam Singh - 191CS142 |
