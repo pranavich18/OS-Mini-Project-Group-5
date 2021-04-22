@@ -8,6 +8,7 @@
 #include "include/Disk_Scheduling.h"
 #include "include/producer_consumer.h"
 #include "include/mft.h"
+#include "include/sleeping_barber.h"
 
 
 using namespace std;
@@ -23,6 +24,7 @@ int main() {
 	// Call Disk_Scheduling() to execute Disk Scheduling algos
 	// Call producer_consumer() to execute Producer-Consumer problem
 	// Call mft() to execute MFT memory management.
+	// Call sleeping_barber() to execute sleeping barbers algorithm
 
 	return 0;
 }
