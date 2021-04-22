@@ -24,6 +24,7 @@ struct Process {
     int bt;
     int tat = 0;
     int wt = -1;
+    int prio = -1;
 } arr[MAX_SIZE_PROC];
 
 // Global variable to store the number of processes
@@ -288,6 +289,85 @@ void findWT_hrrn() {
     }
 }
 
+// Function to find waiting time of each process for Non-Preemptive Priority Scheduling Algorithm
+void findWT_prio_np() {
+    int completed = 0, t = 0, maxprio = INT_MIN, idx;
+    bool flag = false;
+
+    // Outer loop is run till all processes are complete
+    while (completed < n) {
+
+        // Finding process with highest priority
+        for (int i=0; i < n && arr[i].at <= t; i++) {
+            if (arr[i].prio > maxprio && arr[i].wt < 0) {
+                maxprio = arr[i].prio;
+                idx = i;
+                flag = true;
+            } 
+        }
+
+        // Check if no process was found
+        if (!flag) {
+            t++;
+            continue;
+        }       
+        // If longest process is found, complete the process
+        else {
+            maxprio = INT_MIN;
+            flag = false;
+            completed++;
+
+            arr[idx].wt = t - arr[idx].at;
+            t += arr[idx].bt;
+        }
+    }
+}
+
+// Function to find waiting time of each process for Preemptive Priority Scheduling Algorithm
+void findWT_prio_p() {
+    
+    // Initializing an array to hold remaining time values
+    int *rt = new int(n);
+    for (int i=0; i<n; i++) {
+        rt[i] = arr[i].bt;
+    }
+
+    int completed = 0, t = 0, maxprio = INT_MIN, idx;
+    bool flag = false;
+
+    // Running while loop until all processes are completed
+    while (completed != n) {
+
+        // Finding process with longest remaining time
+        for (int i=0; i < n && arr[i].at <= t; i++) {
+            if (arr[i].prio > maxprio && rt[i] > 0) {
+                maxprio = arr[i].prio;
+                idx = i;
+                flag = true;
+            } 
+        }
+
+        // Check if no process was found
+        if (!flag) {
+            t++;
+            continue;
+        }
+
+        // Update remaining time of longest process and update maximum time value
+        rt[idx]--;
+        
+        // Check if longest process is completed
+        if (rt[idx] == 0) {
+            maxprio = INT_MIN;
+            completed++;
+            flag = false;
+
+            arr[idx].wt = t + 1 - arr[idx].bt - arr[idx].at;
+        }
+        t++;
+    }
+}
+
 // Helper function to sort processes based on their arrival times
 bool cmp (Process p1, Process p2) {
     return (p1.at < p2.at);
@@ -319,6 +399,16 @@ void inputProcessesCPU() {
     sort(arr, arr + n, cmp);
 }
 
+void inputPrioCPU() {
+    // Input the priority for each process
+    for (int i=0; i < n; i++) {
+        cout << "\n\nFor Process " << arr[i].pid;
+        cout << "\n--------------\n";
+        cout << "Enter the Priority: ";
+        cin >> arr[i].prio;
+    }
+}
+
 // Function to display the results to the user
 void displayResultCPU() {
     float avgTAT = 0, avgWT = 0;
@@ -332,6 +422,29 @@ void displayResultCPU() {
         cout << left << setw(15) << arr[i].bt;
         cout << left << setw(17) << arr[i].wt;
         cout << left << setw(20) << arr[i].tat << endl;
+
+        avgTAT += arr[i].tat;
+        avgWT += arr[i].wt;
+    }
+
+    cout << "\nAverage Waiting Time: " << (avgWT / n) << endl;
+    cout << "Average Turnaround Time: " << (avgTAT / n) << "\n\n";
+}
+
+// Function to display the results to the user
+void displayResultPrioCPU() {
+    float avgTAT = 0, avgWT = 0;
+
+    cout << "\nPID\tArrival Time\tBurst Time\tPriority\tWaiting Time\tTurnaround Time\n\n";
+
+    // Print the results for each process in the array
+    for (int i=0; i<n; i++) {
+        cout << left << setw(8) << arr[i].pid;
+        cout << left << setw(16) << arr[i].at;
+        cout << left << setw(16) << arr[i].bt;
+        cout << left << setw(16) << arr[i].prio;
+        cout << left << setw(16) << arr[i].wt;
+        cout << left << setw(16) << arr[i].tat << endl;
 
         avgTAT += arr[i].tat;
         avgWT += arr[i].wt;
@@ -360,6 +473,8 @@ void CPU_Scheduling() {
         cout << "5. Longest Remaining Time First (LRTF)\n";
         cout << "6. Round Robin (RR)\n";
         cout << "7. Highest Response Ratio Next (HRRN)\n";
+        cout << "8. Non-Preemptive Priority\n";
+        cout << "9. Preemptive Priority\n";
         cout << "\nEnter your choice: ";
         cin >> choice;
 
@@ -427,6 +542,26 @@ void CPU_Scheduling() {
                 findTAT();
                 cout << "\nUsing the HRRN Algorithm:\n";
                 displayResultCPU();
+
+                break;
+            }
+            // Non-Preemptive Priority Case
+            case 8: {
+                inputPrioCPU();
+                findWT_prio_np();
+                findTAT();
+                cout << "\nUsing the Non-Preemptive Priority Algorithm:\n";
+                displayResultPrioCPU();
+
+                break;
+            }
+            // Preemptive Priority Case
+            case 9: {
+                inputPrioCPU();
+                findWT_prio_p();
+                findTAT();
+                cout << "\nUsing the Preemptive Priority Algorithm:\n";
+                displayResultPrioCPU();
 
                 break;
             }
