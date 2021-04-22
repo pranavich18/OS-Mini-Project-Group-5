@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 #include "include/paging_algo.h"
 
+#define MAX_SIZE 50
+
 using namespace std;
 
 //Function to simulate FIFO paging
@@ -279,7 +281,7 @@ void paging_lru(){
 //MRU paging
 // Initialize a global array of frames, pages along with some necessary global variables
 int frames[MAX_SIZE], pagetable[MAX_SIZE], disk[MAX_SIZE];
-int size = 0, t = 0, capacity, page_fault = 0, n_pages, n_tracks, thead;
+int memsize = 0, t = 0, capacity, page_fault = 0, n_pages, n_tracks, thead;
 
 // Initialize a global hash map to store the time of entry of each page
 unordered_map<int, int> pages;
@@ -288,7 +290,7 @@ unordered_map<int, int> pages;
 void MRUPaging(int page, int offset)
 {
     // If all the frames are not filled yet
-    if (size < capacity) {
+    if (memsize < capacity) {
         for (int i = 0; i < capacity; i++) {
             
             // If the page already exists in a frame, print appropriate message and return
@@ -301,10 +303,10 @@ void MRUPaging(int page, int offset)
         
         // If the page does not exist in a frame, increase page fault and add the page to a frame
         cout << "\nPage " << page << " is not present in Physical memory.\n";
-        cout << "Page " << page << " accomodated at Frame " << size << endl;
+        cout << "Page " << page << " accomodated at Frame " << memsize << endl;
 
-        pagetable[page] = size;
-        frames[size++] = page;
+        pagetable[page] = memsize;
+        frames[memsize++] = page;
         page_fault++;
         pages[page] = t++;
         return;

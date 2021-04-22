@@ -5,6 +5,7 @@
 #include "include/reader_writer.h"
 #include "include/paging_algo.h"
 #include "include/mvt.h"
+#include "include/Disk_Scheduling.h"
 
 
 using namespace std;
@@ -17,7 +18,7 @@ int main() {
 	// Call reader_writer() to execute reader writer algorithm.
 	// Call paging() to execute Paging algos.
 	// Call mvt() to execute MVT memory management.
-
+	// Call Disk_Scheduling() to execute Disk Scheduling algos
 
 	return 0;
 }
