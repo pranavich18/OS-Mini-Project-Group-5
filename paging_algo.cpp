@@ -410,9 +410,9 @@ void paging_mru(){
             // MRU Paging case
             case 1: {
                 do {
-                    cout << "\nEnter the page number and word offset: ";
+                    cout << "\nEnter the page number and word offset (offset in byte): ";
                     cin >> pno >> offset;
-                } while (pno < 0 || pno < 0);
+                } while (offset <= 0 || pno < 0);
 
                 if(pno >= n_pages){
                 cout << "ERROR! Entered page number is not present in Virtual Memory" << endl;
