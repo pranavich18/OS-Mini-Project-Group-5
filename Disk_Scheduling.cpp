@@ -8,10 +8,14 @@ int Disk_Scheduling()
 {
 
   int choice;
-  cout<<"    Enter 0.Main Menu 1.SCAN 2.CSCAN 3.LOOK 4.CLOOK 5.SSTF : ";
+  cout<<"    Enter 0.Main Menu 1.SCAN 2.CSCAN 3.LOOK 4.CLOOK 5.SSTF 6.FCFS : ";
   cin>>choice;
-  if(choice<1 || choice>5)
+  if(choice<1 || choice>6)
+  {
+    cout<<"\n";
     return 0;// return=0 means go to main menu;
+  }
+
   else
   {
     int tot_disks, n;//n is the number of requests.
@@ -408,15 +412,15 @@ int Disk_Scheduling()
           }
           else if(req[mark]<cur_pos && cur_pos<req[mark+1])
           {
-            if(req[mark+1]-cur_pos>=cur_pos-req[mark])
+            if(req[mark+1]-cur_pos<=cur_pos-req[mark])
             {
-              for(i=mark; i<n; i++)
+              for(i=mark+1; i<n; i++)
               {
                 cout<<" "<<req[i];
                 seek_time+=abs(req[i]-cur_pos);
                 cur_pos=req[i];
               }
-              for(i=mark-1; i>=0; i--)
+              for(i=mark; i>=0; i--)
               {
                 cout<<" "<<req[i];
                 seek_time+=abs(req[i]-cur_pos);
@@ -425,13 +429,13 @@ int Disk_Scheduling()
             }
             else
             {
-              for(i=mark-1; i>=0; i--)
+              for(i=mark; i>=0; i--)
               {
                 cout<<" "<<req[i];
                 seek_time+=abs(req[i]-cur_pos);
                 cur_pos=req[i];
               }
-              for(i=mark; i<n; i++)
+              for(i=mark+1; i<n; i++)
               {
                 cout<<" "<<req[i];
                 seek_time+=abs(req[i]-cur_pos);
@@ -445,8 +449,20 @@ int Disk_Scheduling()
       cout<<"\n";
 
     }
+    else if(choice==6)
+    {
+      cout<<"    Seek Sequence :";
+      for(i=0; i<n; i++)
+      {
+        cout<<" "<<req[i];
+        seek_time+=abs(req[i]-cur_pos);
+        cur_pos=req[i];
+      }
+      cout<<"\n";
+    }
 
     cout<<"    Seek Time = "<<seek_time<<"\n\n";
     return 1;//return 1 means this function should be called again.
   }
 }
+
