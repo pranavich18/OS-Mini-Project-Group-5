@@ -311,6 +311,8 @@ void inputProcessesCPU() {
         cin >> arr[i].bt;
 
         arr[i].pid = i;
+        arr[i].tat = 0;
+        arr[i].wt = -1;
     }
 
     // Sort the processes based on their arrival times
@@ -341,92 +343,137 @@ void displayResultCPU() {
 
 // Top Level function used in main.cpp, this is the only function accessible through cpu_algo.h
 void CPU_Scheduling() {
-    int choice, quantum;
+    int choice, quantum, ret = 0;
 
     // Input the processes from the user
     inputProcessesCPU();
 
-    // List out the supported CPU Scheduling Algorithms
-    cout << "\n\nChoose CPU Scheduling Algorithm\n";
-    cout << "-------------------------------\n\n";
-    cout << "1. First Come First Serve (FCFS)\n";
-    cout << "2. Shortest Job First (SJF)\n";
-    cout << "3. Longest Job First (LJF)\n";
-    cout << "4. Shortest Remaining Time First (SRTF)\n";
-    cout << "5. Longest Remaining Time First (LRTF)\n";
-    cout << "6. Round Robin (RR)\n";
-    cout << "7. Highest Response Ratio Next (HRRN)\n";
-    cout << "\nEnter your choice: ";
-    cin >> choice;
+    // Program menu will display until user chooses to return to main menu
+    while (true) {
+        // List out the supported CPU Scheduling Algorithms
+        cout << "\n\nChoose CPU Scheduling Algorithm\n";
+        cout << "-------------------------------\n";
+        cout << "1. First Come First Serve (FCFS)\n";
+        cout << "2. Shortest Job First (SJF)\n";
+        cout << "3. Longest Job First (LJF)\n";
+        cout << "4. Shortest Remaining Time First (SRTF)\n";
+        cout << "5. Longest Remaining Time First (LRTF)\n";
+        cout << "6. Round Robin (RR)\n";
+        cout << "7. Highest Response Ratio Next (HRRN)\n";
+        cout << "\nEnter your choice: ";
+        cin >> choice;
 
-    // Switch case based on User Input
-    switch(choice) {
-        // FCFS Case
-        case 1: {
-            findWT_fcfs();
-            findTAT();
-            cout << "\nUsing FCFS Scheduling Algorithm:\n";
-            displayResultCPU();
+        // Switch case based on User Input
+        switch(choice) {
+            // FCFS Case
+            case 1: {
+                findWT_fcfs();
+                findTAT();
+                cout << "\nUsing FCFS Scheduling Algorithm:\n";
+                displayResultCPU();
 
+                break;
+            }
+            // SJF Case
+            case 2: {
+                findWT_sjf();
+                findTAT();
+                cout << "\nUsing SJF Scheduling Algorithm:\n";
+                displayResultCPU();
+
+                break;
+            }
+            // LJF Case
+            case 3: {
+                findWT_ljf();
+                findTAT();
+                cout << "\nUsing LJF Scheduling Algorithm:\n";
+                displayResultCPU();
+
+                break;
+            }
+            // SRTF Case
+            case 4: {
+                findWT_srtf();
+                findTAT();
+                cout << "\nUsing the SRTF Algorithm:\n";
+                displayResultCPU();
+
+                break;
+            }
+            // LRTF Case
+            case 5: {
+                findWT_lrtf();
+                findTAT();
+                cout << "\nUsing the LRTF Algorithm:\n";
+                displayResultCPU();
+
+                break;
+            }
+            // RR Case
+            case 6: {
+                cout << "\nEnter the value of time quantum: ";
+                cin >> quantum;
+                findWT_rr(quantum);
+                findTAT();
+                cout << "\nUsing the Round Robin Algorithm with time quantum = " << quantum << ":\n";
+                displayResultCPU();
+
+                break;
+            }
+            // HRRN Case
+            case 7: {
+                findWT_hrrn();
+                findTAT();
+                cout << "\nUsing the HRRN Algorithm:\n";
+                displayResultCPU();
+
+                break;
+            }
+            // Default case to handle invalid user inputs
+            default: "\nInvalid choice entered...\n";
+        }
+
+        // Next option menu
+        cout << "\nChoose next option:\n";
+        cout << "-------------------\n";
+        cout << "1. Input Processes again\n";
+        cout << "2. Use a different CPU Scheduling Algorithm\n";
+        cout << "3. Return to Main Menu\n";
+        cout << "\nEnter your choice: ";
+        cin >> choice;
+
+        // Switch case based user inputted choice
+        switch(choice) {
+            // Input new processes
+            case 1: {
+                inputProcessesCPU();
+
+                break;
+            }
+            // Use different scheduling algorithm with same processes
+            case 2: {
+                // Reset the waiting times and turnaround times for each process
+                for (int i=0; i < n; i++) {
+                    arr[i].wt = -1;
+                    arr[i].tat = 0;
+                }
+
+                break;
+            }
+            // Exit to main menu
+            case 3: {
+                ret = 1;
+
+                break;
+            }
+            // Default case to handle invalid user inputs
+            default: "\nInvalid choice entered...\n";
+        }
+
+        // Check if ret variable is set to 1, and return to main menu if true
+        if (ret == 1) {
             break;
         }
-        // SJF Case
-        case 2: {
-            findWT_sjf();
-            findTAT();
-            cout << "\nUsing SJF Scheduling Algorithm:\n";
-            displayResultCPU();
-
-            break;
-        }
-        // LJF Case
-        case 3: {
-            findWT_ljf();
-            findTAT();
-            cout << "\nUsing LJF Scheduling Algorithm:\n";
-            displayResultCPU();
-
-            break;
-        }
-        // SRTF Case
-        case 4: {
-            findWT_srtf();
-            findTAT();
-            cout << "\nUsing the SRTF Algorithm:\n";
-            displayResultCPU();
-
-            break;
-        }
-        // LRTF Case
-        case 5: {
-            findWT_lrtf();
-            findTAT();
-            cout << "\nUsing the LRTF Algorithm:\n";
-            displayResultCPU();
-
-            break;
-        }
-        // RR Case
-        case 6: {
-            cout << "\nEnter the value of time quantum: ";
-            cin >> quantum;
-            findWT_rr(quantum);
-            findTAT();
-            cout << "\nUsing the Round Robin Algorithm with time quantum = " << quantum << ":\n";
-            displayResultCPU();
-
-            break;
-        }
-        // HRRN Case
-        case 7: {
-            findWT_hrrn();
-            findTAT();
-            cout << "\nUsing the HRRN Algorithm:\n";
-            displayResultCPU();
-
-            break;
-        }
-        // Default case to handle invalid user inputs
-        default: "\nInvalid choice entered...\n";
     }
 }
