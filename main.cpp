@@ -7,6 +7,7 @@
 #include "include/mvt.h"
 #include "include/Disk_Scheduling.h"
 #include "include/producer_consumer.h"
+#include "include/mft.h"
 
 
 using namespace std;
@@ -21,6 +22,7 @@ int main() {
 	// Call mvt() to execute MVT memory management.
 	// Call Disk_Scheduling() to execute Disk Scheduling algos
 	// Call producer_consumer() to execute Producer-Consumer problem
+	// Call mft() to execute MFT memory management.
 
 	return 0;
 }
