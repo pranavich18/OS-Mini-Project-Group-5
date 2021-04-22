@@ -5,7 +5,7 @@
 #include "include/reader_writer.h"
 #include "include/paging_algo.h"
 #include "include/mvt.h"
-
+#include "include/dining_philosopher.h"
 
 using namespace std;
 
@@ -17,6 +17,7 @@ int main() {
 	// Call reader_writer() to execute reader writer algorithm.
 	// Call paging() to execute Paging algos.
 	// Call mvt() to execute MVT memory management.
+	// Call dining_philosopher to execute the Dining Philosophers algo.
 
 
 	return 0;
