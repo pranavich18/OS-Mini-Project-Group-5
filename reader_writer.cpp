@@ -139,7 +139,7 @@ int reader_writer()
         if (currProcess.is_wrt) {
             if (in >= BufferSize) {
                 cout << "Buffer is full so writers can no longer write.\n\n";
-                exit(0);
+                return 0;
             }
             pthread_create(&write[m++], NULL, writer, (void *)&currProcess);
             msg = "writer ";

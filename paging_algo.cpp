@@ -131,7 +131,7 @@ void paging_fifo(){
                 for(auto it = page_frame.begin(); it != page_frame.end(); it++){
                     cout << it -> second << "\t" << it -> first << endl;
                 }
-                exit(0);
+                return;
             }
             default: cout << "Invalid input entered..Enter again\n";
         }
@@ -271,7 +271,7 @@ void paging_lru(){
                 for(auto it = page_frame.begin(); it != page_frame.end(); it++){
                     cout << it -> second << "\t" << it -> first << endl;
                 }
-                exit(0);
+                return;
             }
             default: cout << "Invalid input entered..Enter again\n";
         }
@@ -432,7 +432,7 @@ void paging_mru(){
             // Quit case
             case 2: {
                 display(n_in);
-                exit(0);
+                return;
             }
             // Default case for invalid input
             default: cout << "\nInvalid choice entered..Enter again\n";

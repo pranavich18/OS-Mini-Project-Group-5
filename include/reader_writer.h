@@ -1,1 +1,1 @@
-void reader_writer();
+int reader_writer();

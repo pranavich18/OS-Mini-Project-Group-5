@@ -95,7 +95,7 @@ void mft_best_fit()
             case 2:remove();
             break;
             case 3: print();
-            exit(1);
+            return;
         }
 
     }
@@ -442,7 +442,7 @@ auto deleteProc= [] (int pid) {
                     }
                 }
                 cout << "\n\nThank you for using my program!\n\n";
-                exit(0);
+                return;
             }
         }
     }
