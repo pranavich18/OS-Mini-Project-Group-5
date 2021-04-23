@@ -6,9 +6,6 @@ using namespace std;
 
 void mft_best_fit()
 {
-
-    
-     
     static int total_size,n_parts,unused;
     static vector<pair<int,int>> parts;
     static vector<int> v;
