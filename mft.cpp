@@ -6,6 +6,9 @@ using namespace std;
 
 void mft_best_fit()
 {
+
+    
+     
     static int total_size,n_parts,unused;
     static vector<pair<int,int>> parts;
     static vector<int> v;
@@ -101,9 +104,6 @@ void mft_best_fit()
     }
 
 }
-
-
-
 
 void mft_first_fit(){
     int tot_size, n;
@@ -266,25 +266,21 @@ void mft_first_fit(){
         cout << "\n";
         cout << "Space with no partition: " << space << "\n";
         cout << "Total internal fragmentation: " << tot_frag << "\n";
+
+return;
 }
 
-
-
-
-
-
- // Structure for each partition, consisting of the size of each partition and the process assigned to it
+void mft_worst_fit()
+{ // Structure for each partition, consisting of the size of each partition and the process assigned to it
 struct Partition {
     int size;
     int pid = -1;
     int psize = 0;
-}partitions[50]; 
+};
 
-void mft_worst_fit()
-{
+     static Partition partitions[50];      
 
 
- 
     
     static int n_part, n_proc, int_frag = 0, size;
     
