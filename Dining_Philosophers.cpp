@@ -1,5 +1,5 @@
 #include<bits/stdc++.h>
-#include "include/Disk_Scheduling.h"
+#include "include/Dining_Philosophers.h"
 
 using namespace std;
 
