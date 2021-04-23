@@ -99,19 +99,38 @@ int reader_writer()
     // Initialize the mutex
     pthread_mutex_init(&mutex, NULL);
 
+	int number_of_readers,number_of_writers;
+	cout<<"Enter the number of readers and writers"<<endl;
+	cin>>number_of_readers>>number_of_writers;
+	
+	struct Process writers[number_of_writers];
+	struct Process readers[number_of_readers];
     // Array of writers
-    struct Process writers[3] = {
-        {1, 0 ,2, true},
-        {2, 1, 3, true},
-        {3, 2, 2, true}
-    };
-
-    // Array of readers
-    struct Process readers[3] = {
-        {1, 0 ,2, false},
-        {2, 1, 2, false},
-        {3, 2, 3, false}
-    };
+    cout<<"Enter the arrival time and burst time of the readers"<<endl;
+	
+	for(int i = 0; i < number_of_readers; i++)
+	{
+		int arrival, burst;
+		cin>>arrival>>burst;
+		//processes.push_back(make_tuple(arrival,1,burst,i+1));
+		readers[i].pid = i+1;
+		readers[i].at = arrival;
+		readers[i].bt = burst;
+		readers[i].is_wrt = false;
+	}
+	
+	cout<<"Enter the arrival time and burst time of the writers"<<endl;
+	for(int i = 0; i < number_of_writers; i++)
+	{
+		int arrival, burst;
+		cin>>arrival>>burst;
+		//processes.push_back(make_tuple(arrival,0,burst,i+1));
+		writers[i].pid = i+1;
+		writers[i].at = arrival;
+		writers[i].bt = burst;
+		writers[i].is_wrt = true;
+	}
+	
 
     // Add elements to queue in FCFS method, giving higher priority to writers
     while (processes.size() != 6) {
