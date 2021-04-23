@@ -84,17 +84,24 @@ void paging_fifo(){
 
             // If all the frames are filled
             else{
-                
+                int f = 0;
                 // If the page does not exist in a frame, remove page according to first in first out 
                 if (page.find(page_no) == page.end()){
                     int val = index.front();
                     index.pop();
                     page.erase(val);
                     page.insert(page_no);
+                    for(auto it = page_frame.begin(); it != page_frame.end(); it++){
+                        if(it -> first == val){
+                            f = it -> second;
+                            break;
+                        }
+                    }
                     page_frame.erase(val);
-                    page_frame.insert({page_no, fno});
+                    page_frame.insert({page_no, f});
                     page_faults++;
-                    cout << "Page number " << page_no << " is not present in physical memory so it has been accomodated after removing page number " << val << " according to FIFO" << endl;
+                    cout << "Page number " << page_no << " is not present in physical memory so it has been accomodated after removing page number " << val << " in frame " << f;
+                    cout << "\naccording to FIFO" << endl;
                 }
                 
                 // If the page already exists in a frame, print appropriate message
@@ -217,7 +224,7 @@ void paging_lru(){
 
             // If all the frames are filled
             else{
-                
+                int f = 0;
                 // If the page does not exist in a frame, remove least recently used page
                 if (page.find(page_no) == page.end()){
                     int lru = INT8_MAX, val;
@@ -229,10 +236,17 @@ void paging_lru(){
                     }
                     page.erase(val);
                     page.insert(page_no);
+                    for(auto it = page_frame.begin(); it != page_frame.end(); it++){
+                        if(it -> first == val){
+                            f = it -> second;
+                            break;
+                        }
+                    }
                     page_frame.erase(val);
-                    page_frame.insert({page_no, fno});
+                    page_frame.insert({page_no, f});
                     page_faults++;
-                    cout << "Page number " << page_no << " is not present in physical memory so it has been accomodated after removing page number " << val << " according to LRU" << endl;
+                    cout << "Page number " << page_no << " is not present in physical memory so it has been accomodated after removing page number " << val << " in frame " << f;
+                    cout << "\naccording to LRU" << endl;
                 }
 
                 // If the page already exists in a frame, print appropriate message
@@ -373,19 +387,19 @@ void paging_mru(){
 
     // Check for positive integer input
     do {
-        cout << "\nEnter the size of virtual memory: ";
+        cout << "\nEnter the size of virtual memory (in KB): ";
         cin >> vsize;
     } while (vsize <= 0);
     
     // Check for positive integer input
     do {
-        cout << "Enter the size of physical memory: ";
+        cout << "Enter the size of physical memory (in KB): ";
         cin >> psize;
     } while (psize <= 0);
 
     // Check for positive integer input
     do {
-        cout << "Enter the size of each page: ";
+        cout << "Enter the size of each page (in KB): ";
         cin >> pagesize;
     } while (pagesize <= 0);
 
