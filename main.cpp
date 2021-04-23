@@ -25,15 +25,16 @@ int main() {
 	while(true) {
 		cout << "\n              MAIN MENU\n";
 		cout << "-------------------------------------\n";
-		cout << "1. Execute CPU Scheduling Algorithms\n";
-		cout << "2. Execute Producer Consumer Problem\n";
-		cout << "3. Execute Reader Writer Problem\n";
-		cout << "4. Execute Sleeping Barber's Problem\n";
-		cout << "5. Execute Dining Philosopher Problem\n";
-		cout << "6. Execute MFT Memory Management\n";
-		cout << "7. Execute MVT Memory Management\n";
-		cout << "8. Execute Paging Algorithms\n";
-		cout << "9. Execute Disk Scheduling Algorithms\n";
+		cout << "1.  Execute CPU Scheduling Algorithms\n";
+		cout << "2.  Execute Producer Consumer Problem\n";
+		cout << "3.  Execute Reader Writer Problem\n";
+		cout << "4.  Execute Sleeping Barber's Problem\n";
+		cout << "5.  Execute Dining Philosopher Problem\n";
+		cout << "6.  Execute Banker's Algorithm\n";
+		cout << "7.  Execute MFT Memory Management\n";
+		cout << "8.  Execute MVT Memory Management\n";
+		cout << "9.  Execute Paging Algorithms\n";
+		cout << "10. Execute Disk Scheduling Algorithms\n";
 		cout << "\nPress 0 to quit\n";
 		cout << "Enter your choice: ";
 		cin >> c;
@@ -66,23 +67,28 @@ int main() {
 				Dining_Philosophers();
 				break;
 			}
-			// MFT Case
+			// Banker's Case
 			case 6: {
+				bankers();
+				break;
+			}
+			// MFT Case
+			case 7: {
 				mft();
 				break;
 			}
 			// MVT Case
-			case 7: {
+			case 8: {
 				mvt();
 				break;
 			}
 			// Paging Case
-			case 8: {
+			case 9: {
 				paging();
 				break;
 			}
 			// Disk Scheduling Case
-			case 9: {
+			case 10: {
 				Disk_Scheduling();
 				break;
 			}
