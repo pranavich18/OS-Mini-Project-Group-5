@@ -1,7 +1,7 @@
 # Config variables
 IDIR = ../include
 CC = g++
-CFLAGS = -I$(IDIR)
+CFLAGS = -I$(IDIR) -pthread
 
 # Add the header files to this list
 _DEPS = Bankers.h cpu_algo.h reader_writer.h paging_algo.h mvt.h Disk_Scheduling.h producer_consumer.h mft.h title.h sleeping_barber.h Dining_Philosophers.h

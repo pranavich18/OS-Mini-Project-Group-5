@@ -176,7 +176,6 @@ int reader_writer()
     }
 
     // Exiting statements for threads
-    pthread_exit(NULL);
     pthread_mutex_destroy(&mutex);
 
     return 0;
