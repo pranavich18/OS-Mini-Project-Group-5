@@ -28,10 +28,10 @@ int main() {
 		cout << "1. Execute CPU Scheduling Algorithms\n";
 		cout << "2. Execute Producer Consumer Problem\n";
 		cout << "3. Execute Reader Writer Problem\n";
-		cout << "4. Execute Dining Philosopher Problem\n";
-		cout << "5. Execute MFT Memory Management\n";
-		cout << "6. Execute MVT Memory Management\n";
-		cout << "7. Execute Sleeping Barber's Problem\n";
+		cout << "4. Execute Sleeping Barber's Problem\n";
+		cout << "5. Execute Dining Philosopher Problem\n";
+		cout << "6. Execute MFT Memory Management\n";
+		cout << "7. Execute MVT Memory Management\n";
 		cout << "8. Execute Paging Algorithms\n";
 		cout << "9. Execute Disk Scheduling Algorithms\n";
 		cout << "\nPress 0 to quit\n";
@@ -56,24 +56,24 @@ int main() {
 				reader_writer();
 				break;
 			}
-			// Dining Philosopher Case
+			// Sleeping Barber Case
 			case 4: {
+				sleeping_barber();
+				break;
+			}
+			// Dining Philosopher Case
+			case 5: {
 				Dining_Philosophers();
 				break;
 			}
 			// MFT Case
-			case 5: {
+			case 6: {
 				mft();
 				break;
 			}
 			// MVT Case
-			case 6: {
-				mvt();
-				break;
-			}
-			// Sleeping Barber Case
 			case 7: {
-				sleeping_barber();
+				mvt();
 				break;
 			}
 			// Paging Case
