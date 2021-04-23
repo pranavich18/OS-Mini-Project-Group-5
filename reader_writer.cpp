@@ -1,110 +1,184 @@
-#include<bits/stdc++.h>
+// Compile the following program with -pthread flag > g++ -pthread 191CS141_ReaderWriter.cpp
+#include <pthread.h>
+#include <iostream>
+#include <iomanip>
+#include <queue>
+#include <string>
 #include "include/reader_writer.h"
+
+// Defining the maximum size of the buffer
+#define BufferSize 6
 
 using namespace std;
 
-// print message based on the index of the process waiting and the index of the process running
-void print_message(int id1, int id2, int index1, int index2, int time)
-{
-	printf("At time %d, ",time);
-	if(!id1)
-	cout<<"Writer";
-	else
-	cout<<"Reader";
-	
-	cout<<index1<<" has to wait as ";
-	
-	if(!id2)
-	cout<<"Writer"<<index2<<" is writing"<<endl;
-	else
-	cout<<"Reader"<<index2<<" is reading"<<endl;
+// Initializing the write semaphore
+int wrt=1;
+pthread_mutex_t mutex;
+
+// Initializing the number of initial readers to 0
+int num_readers = 0;
+
+// Initializing the read/write buffer
+int buffer[BufferSize];
+int in = -1;
+
+// Creating the structure for a process, containing PID, Arrival Time, Burst Time and flag variable for producer/consumer check
+struct Process {
+    int pid;
+    int at;
+    int bt;
+    bool is_wrt;
+};
+
+// Wait function that will wait for a signal to be positive
+void wait(int *s) {
+    while (*s <= 0);
+    (*s)--;
 }
 
+// Post function that increases the value of a given signal
+void post(int *s) {
+    (*s)++;
+}
 
-void reader_writer(){
-	
-	int readers, writers;
-	
-	cout<<"Enter the number of readers and consumers"<<endl;
-	cin>>readers>>writers;
-	
-	// stores the details of all the processes
-	vector<tuple<int,int,int,int> > processes;
-	// stores whether a process has been completed 
-	bool done[readers+writers] = {0};
-	
-	// input all the details
-	cout<<"Enter the arrival time and burst time of the readers"<<endl;
-	
-	for(int i = 0; i < readers; i++)
-	{
-		int arrival, burst;
-		cin>>arrival>>burst;
-		processes.push_back(make_tuple(arrival,1,burst,i+1));
-	}
-	
-	cout<<"Enter the arrival time and burst time of the writers"<<endl;
-	for(int i = 0; i < writers; i++)
-	{
-		int arrival, burst;
-		cin>>arrival>>burst;
-		processes.push_back(make_tuple(arrival,0,burst,i+1));
-	}
-	
-	// sort all the processes based on their arrival time with preference to writers
-	sort(processes.begin(),processes.end());
-	
-	int time = 0; // current time
-	int current = 0, waiting = 1;  // process running and the process waiting
-	
-	while(current < readers+writers)
-	{
-		auto top = processes[current];
-		
-		// if process has already been completed
-		if(done[current])
-		{
-			current++;
-			continue;
-		}
-		
-		// make current time as arrival time if current time is less than arrival time
-		if(time < get<0>(top))
-		 time = get<0>(top);
-		 
-		// increment time with the burst time of the process
-		time+=get<2>(top);
-		
-		// check the waiting messages
-		while(get<0>(processes[waiting]) < time && waiting < readers + writers)
-		{
-			// if a writer is running, every other process has to wait
-			if(get<1>(top) == 0)
-			{
-				print_message(get<1>(processes[waiting]),get<1>(top),get<3>(processes[waiting]),get<3>(top),get<0>(processes[waiting]));
-				waiting++;
-			}
-			// if a reader is running, other readers can be allowed but not writers
-			else
-			{
-				// make the writer wait
-				if(get<1>(processes[waiting]) == 0)
-				{
-					print_message(get<1>(processes[waiting]),get<1>(top),get<3>(processes[waiting]),get<3>(top),get<0>(processes[waiting]));
-					waiting++;
-				}
-				else
-				{
-					// allow the reader
-					done[waiting] = true;
-					time = max(time,get<2>(processes[waiting]) + get<0>(processes[waiting])); 
-					waiting++;
-				}
-			}
-					
-		}
-		
-		done[current] = true;
-		current++;
-	}
+// Function for writer to write data to the buffer
+void *writer(void *process)
+{   
+    pthread_mutex_trylock(&mutex);
+    wait(&wrt);
+    int data = rand();
+    buffer[++in] = data;
+
+    // Printing statement to show what the current writer has written, but this line causes issues in code hence it is commented
+    // cout <<  "Writer " << ((Process *)process)->pid << " wrote " << data << " into the buffer.\n";
+    post(&wrt);
+    pthread_mutex_unlock(&mutex);
+
+}
+
+// Function for reader to read data from the buffer
+void *reader(void *process)
+{   
+    pthread_mutex_trylock(&mutex);
+    num_readers++;
+
+    // If this is the first reader, then it will block the writer
+    if(num_readers == 1) {
+        wait(&wrt);
+    }
+    pthread_mutex_unlock(&mutex);
+
+    int data = buffer[max(in, 0)];
+
+    // Printing statement to show what the current reader has read, but this line causes issues in code hence it is commented
+    // cout << "Reader " << ((Process *)process)->pid << " read " << data << " from the buffer.\n";
+
+    pthread_mutex_trylock(&mutex);
+    num_readers--;
+
+    // If this is the last reader, it will wake up the writer.
+    if(num_readers == 0) {
+        post(&wrt);
+    }
+    pthread_mutex_unlock(&mutex);
+}
+
+// Driver Function
+int reader_writer()
+{   
+    int t=0, m=0, n=0;
+    // STL Queue to implement FCFS for the processes
+    queue<Process> processes;
+
+    // String to print appropriate message when multiple users try to access buffer
+    string msg;
+
+    // PThread arrays to create threads
+    pthread_t read[3],write[3];
+
+    // Initialize the mutex
+    pthread_mutex_init(&mutex, NULL);
+
+    // Array of writers
+    struct Process writers[3] = {
+        {1, 0 ,2, true},
+        {2, 1, 3, true},
+        {3, 2, 2, true}
+    };
+
+    // Array of readers
+    struct Process readers[3] = {
+        {1, 0 ,2, false},
+        {2, 1, 2, false},
+        {3, 2, 3, false}
+    };
+
+    // Add elements to queue in FCFS method, giving higher priority to writers
+    while (processes.size() != 6) {
+        for (int i=0; i<3; i++) {
+            if (writers[i].at == t) {
+                processes.push(writers[i]);
+            }
+        }
+        for (int i=0; i<3; i++) {
+            if (readers[i].at == t) {
+                processes.push(readers[i]);
+            }
+        }
+        t++;
+    }
+
+    t = 0;
+
+    // Simulation of FCFS process scheduling
+    while (!(processes.empty())) {
+        Process currProcess = processes.front();
+        processes.pop();
+
+        // If current process is a writer
+        if (currProcess.is_wrt) {
+            if (in >= BufferSize) {
+                cout << "Buffer is full so writers can no longer write.\n\n";
+                exit(0);
+            }
+            pthread_create(&write[m++], NULL, writer, (void *)&currProcess);
+            msg = "writer ";
+        }
+        // If current process is a reader
+        else {
+            pthread_create(&read[n++], NULL, reader, (void *)&currProcess);
+            msg = "reader ";
+            if (in < 0) {
+                cout << "Buffer is empty so reader cannot read.\n\n";
+            }
+        }
+
+        string msgnext = (processes.front().is_wrt) ? "writer " : "reader ";
+
+        // If the next process is a writer, or if current process is writer and next process is reader
+        if (!(processes.empty()) && (currProcess.bt + t > processes.front().at) && (processes.front().is_wrt || (processes.front().is_wrt != currProcess.is_wrt))) {
+            cout << "At t=" << t << ", buffer is being used by " << msg << currProcess.pid;
+            cout << ". Therefore, " << msgnext << processes.front().pid << " cannot access the buffer.\n\n";
+            t += currProcess.bt;
+        }
+        // If the current process and next process are both readers
+        else if (!(processes.empty()) && currProcess.is_wrt == false && processes.front().is_wrt == false) {
+            if (t + currProcess.bt < processes.front().at + processes.front().bt) {
+                t = processes.front().at + processes.front().bt;
+            }
+            else {
+                t += currProcess.bt;
+            }
+            processes.pop();
+        }
+        
+
+    }
+
+    // Exiting statements for threads
+    pthread_exit(NULL);
+    pthread_mutex_destroy(&mutex);
+
+    return 0;
+    
 }
