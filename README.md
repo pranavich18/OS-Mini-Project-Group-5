@@ -1,4 +1,4 @@
-# OS-Mini-Project-Group-4
+# OS-Mini-Project-Group-5
 
 To compile the project, enter the following command:
 `make main`
