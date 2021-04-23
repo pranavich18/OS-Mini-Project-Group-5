@@ -454,7 +454,139 @@ void paging_mru(){
     }
 
 }
-
+void optimal()
+{
+    cout<<"------Optimal Page Replacement-----"<<endl;
+	cout<<"Enter the size of virtual memory : ";
+	int virtual_memory;
+	cin>>virtual_memory;
+	
+	cout<<"Enter the size of physical memory : ";
+	int physical_memory;
+	cin>>physical_memory;
+	
+	cout<<"Enter the size of page : ";
+	int page_size;
+	cin>>page_size;
+	
+	virtual_memory /= page_size;
+	physical_memory /= page_size;
+	
+	cout<<" No: of pages in virtual memory = "<<virtual_memory<<endl;
+	cout<<" No: of frames in physical memory = "<<physical_memory<<endl;
+	
+	int numberOfFrames;
+	numberOfFrames = physical_memory;
+	
+	
+	vector<int> sequence;
+	vector<int> occurence[virtual_memory];
+	
+	
+	cout<<"Enter the number of page requests : ";
+	int page_requests;
+	cin>>page_requests;
+	
+	
+	for(int i =0; i < page_requests;i++)
+	{
+		int page;
+		cout<<"Enter the page request"<<i<<" : ";
+		cin>>page;
+		sequence.push_back(page);
+		occurence[page].push_back(i);
+	}
+	
+	int faults = 0;
+	int frame[numberOfFrames];
+	memset(frame,-1,sizeof(frame));
+	int pages[virtual_memory];
+	memset(pages,-1,sizeof(pages));
+	
+	for(int j =0; j < page_requests;j++)
+	{
+		cout<<"Page request is : "<<sequence[j];
+		cout<<" Enter the offset request : ";
+		int offset;
+		cin>>offset;
+		
+		occurence[sequence[j]].erase(occurence[sequence[j]].begin());
+		if(offset > page_size * pow(2, 10)){
+                cout << "ERROR! Entered offset exceeds page size" << endl;
+                continue;
+            }
+		
+		// Check for Page hit
+		int i;
+		for( i= 0; i < numberOfFrames; i++)
+		{
+			if(frame[i] == sequence[j])
+			{
+				cout<<"The Physical address for the above virtual address is : "<<i<<" "<<offset<<endl;
+				break;
+			}
+		}
+		if(i != numberOfFrames)
+		{
+			continue;
+		}
+		
+		faults++;
+		// Check if there are some frames which are not alloted
+		for( i= 0; i < numberOfFrames;i++)
+		{
+			if(frame[i] == -1)
+			{
+				cout<<"Page"<<sequence[j]<<" is not present in the physical memory"<<endl;
+				
+				frame[i] = sequence[j];
+				cout<<"so Page"<<sequence[j]<<" is accomodated in the empty frame"<<i<<endl;
+				break;
+				pages[sequence[j]] = frame[i];
+			}
+		}
+		if(i != numberOfFrames)
+		{
+			continue;
+		}
+		
+		// Replace using Optimal
+		cout<<"Page"<<sequence[j]<<" is not present in the physical memory"<<endl;
+		int last_used = 0;
+		
+		for( i= 0; i < numberOfFrames;i++)
+		{
+			if(occurence[frame[i]].empty())
+			{
+				last_used = i;
+				break;
+			}
+			if(occurence[frame[i]][0] > occurence[frame[last_used]][0])
+			  last_used = i;
+		}
+		
+		cout<<"so Page"<<sequence[j]<<" is accomodated in the frame"<<last_used<<" by replacing the page"<<frame[last_used]<<" by optimal Page replacement algorithm"<<endl;
+		frame[last_used] = sequence[j];
+		pages[sequence[j]] = last_used;
+		
+	}
+	cout<<"Number of Page faults is : "<<faults<<endl;
+	cout<<"Fault ratio is : "<<(1.0*faults)/page_requests<<endl<<endl;
+	
+	cout<<"Frame Numbers\tPage Stored\n";
+	for(int k = 0;  k< numberOfFrames;k++)
+	{
+		cout<<k<<"\t\t"<<frame[k]<<endl;
+	}
+	cout<<endl<<endl;
+	/*
+	cout<<"Page Numbers\tFrame in which it is stored\n";
+	for(int k = 0;  k< virtual_memory;k++)
+	{
+		cout<<k<<"\t\t"<<pages[k]<<endl;
+	}
+	* */
+}
 void paging(){
     int choice;
     
@@ -463,6 +595,7 @@ void paging(){
     cout << "1. First In First Out (FIFO)\n";
     cout << "2. Least Recently Used (LRU)\n";
     cout << "3. Most Recently Used (MRU)\n";
+    cout << "4. Optimal Page replacement\n";
     cout << "Enter your choice:";
     cin >> choice;
 
@@ -480,6 +613,8 @@ void paging(){
         case 3: paging_mru();
                 break;
 
+        case 4: optimal();
+                break;
         //default case to handle invalid user inputs        
         default: cout << "Invalid choice entered\n";
     } 
