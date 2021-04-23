@@ -4,8 +4,19 @@
 
 using namespace std;
 
+
+
+
+
+
+
+
+
 void mft_best_fit()
 {
+
+    
+     
     static int total_size,n_parts,unused;
     static vector<pair<int,int>> parts;
     static vector<int> v;
@@ -95,12 +106,23 @@ void mft_best_fit()
             case 2:remove();
             break;
             case 3: print();
-            return;
+            exit(1);
         }
 
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -266,6 +288,8 @@ void mft_first_fit(){
         cout << "\n";
         cout << "Space with no partition: " << space << "\n";
         cout << "Total internal fragmentation: " << tot_frag << "\n";
+
+return;
 }
 
 
@@ -273,18 +297,25 @@ void mft_first_fit(){
 
 
 
- // Structure for each partition, consisting of the size of each partition and the process assigned to it
+
+
+
+
+
+
+
+
+void mft_worst_fit()
+{ // Structure for each partition, consisting of the size of each partition and the process assigned to it
 struct Partition {
     int size;
     int pid = -1;
     int psize = 0;
-}partitions[50]; 
+};
 
-void mft_worst_fit()
-{
+     static Partition partitions[50];      
 
 
- 
     
     static int n_part, n_proc, int_frag = 0, size;
     
@@ -442,7 +473,7 @@ auto deleteProc= [] (int pid) {
                     }
                 }
                 cout << "\n\nThank you for using my program!\n\n";
-                return;
+                exit(0);
             }
         }
     }
@@ -450,8 +481,51 @@ auto deleteProc= [] (int pid) {
     return;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void mft(){
-    cout<<"Enter the choice for Fixed Partitioning Algorithms\n 1 for First Fit\n 2 for Best Fit\n 3 for Worst Fit\n 4 for Exit\n";
+    cout<<"Enter the choice for Variable Partitioning Algorithms\n 1 for First Fit\n 2 for Best Fit\n 3 for Worst Fit\n 4 for Exit\n";
     int ch=0;
     while(ch!=4){
         cout<<"Enter you choice:\n";
