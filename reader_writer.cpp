@@ -53,7 +53,6 @@ void *writer(void *process)
     // cout <<  "Writer " << ((Process *)process)->pid << " wrote " << data << " into the buffer.\n";
     post(&wrt);
     pthread_mutex_unlock(&mutex);
-	return;
 }
 
 // Function for reader to read data from the buffer
@@ -81,7 +80,6 @@ void *reader(void *process)
         post(&wrt);
     }
     pthread_mutex_unlock(&mutex);
-	return;
 }
 
 // Driver Function

@@ -451,7 +451,7 @@ auto deleteProc= [] (int pid) {
 }
 
 void mft(){
-    cout<<"Enter the choice for Variable Partitioning Algorithms\n 1 for First Fit\n 2 for Best Fit\n 3 for Worst Fit\n 4 for Exit\n";
+    cout<<"Enter the choice for Fixed Partitioning Algorithms\n 1 for First Fit\n 2 for Best Fit\n 3 for Worst Fit\n 4 for Exit\n";
     int ch=0;
     while(ch!=4){
         cout<<"Enter you choice:\n";
