@@ -11,6 +11,7 @@
 #include "include/mft.h"
 #include "include/title.h"
 #include "include/sleeping_barber.h"
+#include "include/Dining_Philosophers.h"
 
 using namespace std;
 
@@ -57,7 +58,7 @@ int main() {
 			}
 			// Dining Philosopher Case
 			case 4: {
-				// TODO
+				Dining_Philosophers();
 				break;
 			}
 			// MFT Case

@@ -14,6 +14,7 @@ Defining a process structure which contains
 * Burst Time
 * Turnaround Time
 * Waiting Time
+* Priority
 
 as its attributes.
 Also create a global array of processes
@@ -291,7 +292,7 @@ void findWT_hrrn() {
 
 // Function to find waiting time of each process for Non-Preemptive Priority Scheduling Algorithm
 void findWT_prio_np() {
-    int completed = 0, t = 0, maxprio = INT_MIN, idx;
+    int completed = 0, t = 0, minprio = INT_MAX, idx;
     bool flag = false;
 
     // Outer loop is run till all processes are complete
@@ -299,8 +300,8 @@ void findWT_prio_np() {
 
         // Finding process with highest priority
         for (int i=0; i < n && arr[i].at <= t; i++) {
-            if (arr[i].prio > maxprio && arr[i].wt < 0) {
-                maxprio = arr[i].prio;
+            if (arr[i].prio < minprio && arr[i].wt < 0) {
+                minprio = arr[i].prio;
                 idx = i;
                 flag = true;
             } 
@@ -313,7 +314,7 @@ void findWT_prio_np() {
         }       
         // If longest process is found, complete the process
         else {
-            maxprio = INT_MIN;
+            minprio = INT_MAX;
             flag = false;
             completed++;
 
@@ -332,7 +333,7 @@ void findWT_prio_p() {
         rt[i] = arr[i].bt;
     }
 
-    int completed = 0, t = 0, maxprio = INT_MIN, idx;
+    int completed = 0, t = 0, minprio = INT_MAX, idx;
     bool flag = false;
 
     // Running while loop until all processes are completed
@@ -340,8 +341,8 @@ void findWT_prio_p() {
 
         // Finding process with longest remaining time
         for (int i=0; i < n && arr[i].at <= t; i++) {
-            if (arr[i].prio > maxprio && rt[i] > 0) {
-                maxprio = arr[i].prio;
+            if (arr[i].prio < minprio && rt[i] > 0) {
+                minprio = arr[i].prio;
                 idx = i;
                 flag = true;
             } 
@@ -358,7 +359,7 @@ void findWT_prio_p() {
         
         // Check if longest process is completed
         if (rt[idx] == 0) {
-            maxprio = INT_MIN;
+            minprio = INT_MAX;
             completed++;
             flag = false;
 
@@ -377,17 +378,17 @@ bool cmp (Process p1, Process p2) {
 void inputProcessesCPU() {
     // Check for positive integer input
     do {
-        cout << "\nEnter the number of processes: ";
+        cout << "\n  Enter the number of processes: ";
         cin >> n;
     } while (n <= 0);
 
     // Input the arrival and burst times for each process
     for (int i=0; i < n; i++) {
-        cout << "\n\nFor Process " << i;
-        cout << "\n--------------\n";
-        cout << "Enter the Arrival Time: ";
+        cout << "\n\n  For Process " << i;
+        cout << "\n  --------------\n";
+        cout << "  Enter the Arrival Time: ";
         cin >> arr[i].at;
-        cout << "Enter the Burst Time: ";
+        cout << "  Enter the Burst Time: ";
         cin >> arr[i].bt;
 
         arr[i].pid = i;
@@ -402,9 +403,9 @@ void inputProcessesCPU() {
 void inputPrioCPU() {
     // Input the priority for each process
     for (int i=0; i < n; i++) {
-        cout << "\n\nFor Process " << arr[i].pid;
-        cout << "\n--------------\n";
-        cout << "Enter the Priority: ";
+        cout << "\n\n  For Process " << arr[i].pid;
+        cout << "\n  --------------\n";
+        cout << "  Enter the Priority: ";
         cin >> arr[i].prio;
     }
 }
@@ -457,25 +458,26 @@ void displayResultPrioCPU() {
 // Top Level function used in main.cpp, this is the only function accessible through cpu_algo.h
 void CPU_Scheduling() {
     int choice, quantum, ret = 0;
-
+    cout << "\n  CPU Scheduling\n";
+    cout << "  --------------";
     // Input the processes from the user
     inputProcessesCPU();
 
     // Program menu will display until user chooses to return to main menu
     while (true) {
         // List out the supported CPU Scheduling Algorithms
-        cout << "\n\nChoose CPU Scheduling Algorithm\n";
-        cout << "-------------------------------\n";
-        cout << "1. First Come First Serve (FCFS)\n";
-        cout << "2. Shortest Job First (SJF)\n";
-        cout << "3. Longest Job First (LJF)\n";
-        cout << "4. Shortest Remaining Time First (SRTF)\n";
-        cout << "5. Longest Remaining Time First (LRTF)\n";
-        cout << "6. Round Robin (RR)\n";
-        cout << "7. Highest Response Ratio Next (HRRN)\n";
-        cout << "8. Non-Preemptive Priority\n";
-        cout << "9. Preemptive Priority\n";
-        cout << "\nEnter your choice: ";
+        cout << "\n\n  Choose CPU Scheduling Algorithm\n";
+        cout << "  -------------------------------\n";
+        cout << "  1. First Come First Serve (FCFS)\n";
+        cout << "  2. Shortest Job First (SJF)\n";
+        cout << "  3. Longest Job First (LJF)\n";
+        cout << "  4. Shortest Remaining Time First (SRTF)\n";
+        cout << "  5. Longest Remaining Time First (LRTF)\n";
+        cout << "  6. Round Robin (RR)\n";
+        cout << "  7. Highest Response Ratio Next (HRRN)\n";
+        cout << "  8. Non-Preemptive Priority\n";
+        cout << "  9. Preemptive Priority\n";
+        cout << "\n  Enter your choice: ";
         cin >> choice;
 
         // Switch case based on User Input
@@ -484,7 +486,7 @@ void CPU_Scheduling() {
             case 1: {
                 findWT_fcfs();
                 findTAT();
-                cout << "\nUsing FCFS Scheduling Algorithm:\n";
+                cout << "\n  Using FCFS Scheduling Algorithm:\n";
                 displayResultCPU();
 
                 break;
@@ -493,7 +495,7 @@ void CPU_Scheduling() {
             case 2: {
                 findWT_sjf();
                 findTAT();
-                cout << "\nUsing SJF Scheduling Algorithm:\n";
+                cout << "\n  Using SJF Scheduling Algorithm:\n";
                 displayResultCPU();
 
                 break;
@@ -502,7 +504,7 @@ void CPU_Scheduling() {
             case 3: {
                 findWT_ljf();
                 findTAT();
-                cout << "\nUsing LJF Scheduling Algorithm:\n";
+                cout << "\n  Using LJF Scheduling Algorithm:\n";
                 displayResultCPU();
 
                 break;
@@ -511,7 +513,7 @@ void CPU_Scheduling() {
             case 4: {
                 findWT_srtf();
                 findTAT();
-                cout << "\nUsing the SRTF Algorithm:\n";
+                cout << "\n  Using the SRTF Algorithm:\n";
                 displayResultCPU();
 
                 break;
@@ -520,18 +522,18 @@ void CPU_Scheduling() {
             case 5: {
                 findWT_lrtf();
                 findTAT();
-                cout << "\nUsing the LRTF Algorithm:\n";
+                cout << "\n  Using the LRTF Algorithm:\n";
                 displayResultCPU();
 
                 break;
             }
             // RR Case
             case 6: {
-                cout << "\nEnter the value of time quantum: ";
+                cout << "\n  Enter the value of time quantum: ";
                 cin >> quantum;
                 findWT_rr(quantum);
                 findTAT();
-                cout << "\nUsing the Round Robin Algorithm with time quantum = " << quantum << ":\n";
+                cout << "\n  Using the Round Robin Algorithm with time quantum = " << quantum << ":\n";
                 displayResultCPU();
 
                 break;
@@ -540,7 +542,7 @@ void CPU_Scheduling() {
             case 7: {
                 findWT_hrrn();
                 findTAT();
-                cout << "\nUsing the HRRN Algorithm:\n";
+                cout << "\n  Using the HRRN Algorithm:\n";
                 displayResultCPU();
 
                 break;
@@ -550,7 +552,7 @@ void CPU_Scheduling() {
                 inputPrioCPU();
                 findWT_prio_np();
                 findTAT();
-                cout << "\nUsing the Non-Preemptive Priority Algorithm:\n";
+                cout << "\n  Using the Non-Preemptive Priority Algorithm:\n";
                 displayResultPrioCPU();
 
                 break;
@@ -560,22 +562,22 @@ void CPU_Scheduling() {
                 inputPrioCPU();
                 findWT_prio_p();
                 findTAT();
-                cout << "\nUsing the Preemptive Priority Algorithm:\n";
+                cout << "\n  Using the Preemptive Priority Algorithm:\n";
                 displayResultPrioCPU();
 
                 break;
             }
             // Default case to handle invalid user inputs
-            default: "\nInvalid choice entered...\n";
+            default: "\n  Invalid choice entered...\n";
         }
 
         // Next option menu
-        cout << "\nChoose next option:\n";
-        cout << "-------------------\n";
-        cout << "1. Input Processes again\n";
-        cout << "2. Use a different CPU Scheduling Algorithm\n";
-        cout << "3. Return to Main Menu\n";
-        cout << "\nEnter your choice: ";
+        cout << "\n  Choose next option:\n";
+        cout << "  -------------------\n";
+        cout << "  1. Input Processes again\n";
+        cout << "  2. Use a different CPU Scheduling Algorithm\n";
+        cout << "  3. Return to Main Menu\n";
+        cout << "\n  Enter your choice: ";
         cin >> choice;
 
         // Switch case based user inputted choice

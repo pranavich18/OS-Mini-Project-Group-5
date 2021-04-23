@@ -33,9 +33,9 @@ void printTitle() {
 
 
 	cout << right << setw(64) << "Mini Project for Operating Systems Lab (CS255)" << "\n\n";
-	cout << right << setw(49) << "Project by Group 4" << "\n\n";
+	cout << right << setw(48) << "Project by Group 4" << "\n\n";
 	for (int i=0; i < 10; i++)
-		cout << right << setw(31 + members[i].length()) << members[i] << endl;
+		cout << right << setw(30 + members[i].length()) << members[i] << endl;
 	cout << endl << string(87, '=') << endl;
 
 }

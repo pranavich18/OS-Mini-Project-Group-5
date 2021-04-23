@@ -4,7 +4,7 @@ CC = g++
 CFLAGS = -I$(IDIR)
 
 # Add the header files to this list
-_DEPS = bankers.h cpu_algo.h reader_writer.h paging_algo.h mvt.h Disk_Scheduling.h producer_consumer.h mft.h title.h sleeping_barber.h Dining_Philosophers.h
+_DEPS = Bankers.h cpu_algo.h reader_writer.h paging_algo.h mvt.h Disk_Scheduling.h producer_consumer.h mft.h title.h sleeping_barber.h Dining_Philosophers.h
 
 DEPS = $(patsubst %, $(IDIR)/%, $(_DEPS))
 
